@@ -1,20 +1,9 @@
 ---
-  - hosts: 127.0.0.1
+  - hosts: dev
     connection: local
     gather_facts: no
-    pre_tasks:
-      - include_vars: ../../{{ aws_acct }}/EC2-Var/{{ node_var_file }}
-    roles:
-      - provision-ec2
-  - post_tasks:
-    hosts: postdeploy
     become: true
     gather_facts: true
-#   vars:
-#   become_user: "{{ ldap_user }}"
-#   remote_user: "{{ldap_user}}"
-    pre_tasks:
-      - include_vars: ../../{{ aws_acct }}/EC2-Var/{{ node_var_file }}
     roles:
       - { role: centos, when: ansible_distribution == "CentOS" }
       - { role: rhel, when: ansible_distribution == "RedHat" }
