@@ -1,0 +1,21 @@
+--- 
+    - name: Add a new group called datadog
+      group: name=dd-agent state=present gid=1444 system=yes
+
+    - name: add user datadog
+      user: name=dd-agent comment="dd-agent" group=dd-agent uid=1445
+
+    - name: Create a new directory for agent file
+      file: path=/opt/agents/datadog/ recurse=yes state=directory owner=sandeepu group=users mode=750 directory_mode=0755
+
+    - name: Copying and Extracting the tar
+      copy: src=./roles/files/datadog-agent-5.14.1-1.x86_64.rpm dest=/opt/agents/datadog/ owner=sandeepu group=users mode=750 directory_mode=0755
+
+    - name: installing the datadog agent
+      yum: name=/opt/agents/datadog/datadog-agent-5.14.1-1.x86_64.rpm
+
+    - name: Copy datadog config file
+      copy: src=./roles/files/datadog.conf dest=/etc/dd-agent/ owner=dd-agent group=dd-agent mode=700
+
+    - name: running the datadog agent
+      service: name=datadog-agent.service state=restarted

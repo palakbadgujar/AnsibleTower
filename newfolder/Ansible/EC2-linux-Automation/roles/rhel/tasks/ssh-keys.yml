@@ -1,0 +1,5 @@
+   - name: Copy my ssh public key
+     authorized_key :
+         user: "{{ ldap_user }}"
+         state: present
+         key: "{{ lookup('file', '../../files/keyfiles/{{ ldap_user }}_id_rsa.pub') }}"

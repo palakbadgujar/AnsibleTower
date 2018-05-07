@@ -1,0 +1,18 @@
+   - name: Create a new directory
+     file: path=/etc/nsupdate/ state=directory mode=0700
+
+   - name: Create a new file
+     file: path=/etc/nsupdate/{{ ec2_name }} state=touch mode=0700
+    
+   - stat: path=/etc/nsupdate/{{ ec2_name }}
+     register: file_path
+
+   - debug: msg="File exists"
+     when: file_path.stat.exists == true
+
+   - name: add lines
+     lineinfile: dest=/etc/nsupdate/{{ ec2_name }}
+                 line="server ns1.hhc.hilton.com\nzone hhc.hilton.com\nupdate add {{ ec2_name }}.hhc.hilton.com 86400 A {{ ec2_private_ip }}\nsend"
+
+   - name: update domain
+     command: nsupdate -v /etc/nsupdate/{{ ec2_name }}

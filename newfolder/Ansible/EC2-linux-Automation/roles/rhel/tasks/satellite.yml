@@ -1,0 +1,65 @@
+---
+# Registers hosts to our Satellite server.
+# For hosts that were built with the DELL based AMI.
+# Requires the act_key to be set based on what role the machine has. See the Satellite server or Confluence
+# for a list of the activation keys to choose from.
+    - name: Adjust auto download setting
+      lineinfile: dest=/etc/yum/yum-cron.conf
+                  regexp="^download_updates"
+                  line="download_updates = no"
+                  state=present
+
+    - name: Adjust auto update setting
+      lineinfile: dest=/etc/yum/yum-cron.conf
+                  regexp="^apply_updates"
+                  line="apply_updates = no"
+                  state=present
+
+    - name: Comment out proxy_host from rhsm
+      replace: dest=/etc/rhsm/rhsm.conf
+                  regexp="^proxy_hostname"
+                  replace="#proxy_hostname"
+
+    - name: Comment out proxy_port from rhsm
+      replace: dest=/etc/rhsm/rhsm.conf
+                  regexp="^proxy_port"
+                  replace="#proxy_port"
+
+    - name: Disable DELL RH7 repo
+      command: yum-config-manager --disable mrepo_RH7_updates
+
+    - name: Disable DELL EPEL repo
+      command: yum-config-manager --disable EPEL
+
+    - name: Kill runnning yum-cron.daily if it started
+      shell: pgrep yum | xargs kill -9
+      ignore_errors: yes
+
+    - name: Install Satellite certs and configure RHSM
+      yum: name=http://satelinfl00uemg.hhc.hilton.com/pub/katello-ca-consumer-latest.noarch.rpm state=present
+
+    - name: Subscribe to Satellite using correct Organization and Activation key
+#      redhat_subscription: org_id={{ org_id }}
+#                           activationkey={{ act_key }}
+#                           force_register=yes
+# force doesn't seem to work although it is supposed to be supported in Ansible 2.2 and above
+# So, use a command instead
+      command: subscription-manager register --org=Hilton_World_Wide --activationkey={{ sat_activation_key }} --force
+
+    - name: set RHEL version
+      command: subscription-manager release --set '7.3'
+      ignore_errors: yes
+   
+    - name: disable oracle repo
+      command: subscription-manager repos --disable=rhel-7-server-thirdparty-oracle-java-rpms 
+      ignore_errors: yes 
+
+    - name: enable common repo for katello-agent
+      command: subscription-manager repos --enable=rhel-7-server-rh-common-rpms
+      ignore_errors: yes
+    
+    - name:  clean all
+      command: yum clean all
+
+    - name: Install Satellite agent
+      yum: name=katello-agent state=latest

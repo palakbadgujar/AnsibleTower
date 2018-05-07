@@ -1,0 +1,15 @@
+---
+ - include: nsupdate.yml
+   when: ansible_distribution == "RedHat"
+ - include: del-sudoers.yml
+   when: ansible_distribution == "RedHat"
+ - include: satellite.yml
+   when: ansible_distribution == "RedHat"
+ - include: yumupdate.yml
+   when: ansible_distribution == "RedHat"
+# - include: splunk.yml
+#   when: ansible_distribution == "RedHat"
+# - include: datadog.yml
+#   when: ansible_distribution == "RedHat"
+ - include: reboot.yml
+   when: ansible_distribution == "RedHat"

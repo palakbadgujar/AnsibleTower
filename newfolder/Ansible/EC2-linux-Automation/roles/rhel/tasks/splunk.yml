@@ -1,0 +1,17 @@
+  - name: create the directory splunkforwarder
+    file: path=/opt/splunkforwarder/ recurse=yes state=directory
+
+  - name: Create a new directory
+    file: path=/opt/agents/splunk/ state=directory directory_mode=0755 recurse=yes
+
+  - name: Copying rpm file
+    copy: src=./roles/files/splunkforwarder-6.5.0-59c8927def0f-linux-2.6-x86_64.rpm dest=/opt/agents/splunk mode=0755 directory_mode=0755
+
+  - name: Copying sh file
+    copy: src=./roles/files/install_hilton_rh_splunk_uf_dc.sh dest=/opt/agents/splunk mode=0755 directory_mode=0755
+
+  - name: instal RPM
+    shell: /opt/agents/splunk/install_hilton_rh_splunk_uf_dc.sh -i /opt/agents/splunk/splunkforwarder-6.5.0-59c8927def0f-linux-2.6-x86_64.rpm
+
+  - name: delete sh and RPM file
+    file: path=/opt/agents/splunk/ state=directory state=absent

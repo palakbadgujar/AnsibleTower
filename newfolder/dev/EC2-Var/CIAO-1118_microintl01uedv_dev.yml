@@ -1,0 +1,38 @@
+#DEFAULT
+ec2_monitor: "no"
+ec2_tag_deploy: "automation-removed-after-deploy"
+public: "no"
+count: "1"
+dest_check: "yes"
+u_data: "true"
+#IMAGE
+ec2_image: "ami-4759ce50"
+#TAGS
+ec2_tag_appeml: "sanjay.chachad@hilton.com"
+ec2_tag_comply: "false"
+ec2_tag_dept: "17379"
+ec2_tag_cat: "corporate"
+ec2_tag_pemail: "sudhir.menon@hilton.com"
+ec2_tag_pact: "730990"
+ec2_tag_pdept: "17379"
+ec2_tag_pname: "eim renovations"
+ec2_tag_speed: "1000031576"
+ec2_tag_pub: "false"
+#SECURITY
+ec2_security_group: ['sg-c9c6c780']
+#SUBNET
+ec2_subnet_ids: "subnet-9f1a14a0"
+#NETWORK
+ec2_name: "microintl01uedv"
+ec2_private_ip: "10.97.8.13"
+#JIRA TICKET
+ec2_instance_type: "t2.micro"
+ec2_region: "us-east-1e"
+ec2_tag_appname: "microstrategy"
+ec2_tag_func: "intelligence server"
+ec2_root_volume_size: "500"
+user_data_file: "../../{{ aws_acct }}/userdata/{{ ec2_name }}"
+ec2_os: "rhel 7.3 "
+#POST DEPLOY
+sat_activation_key: "RHELEPEL_NONPROD"
+ssh: "svcTowerDev"

@@ -1,0 +1,7 @@
+---
+ - include: nsupdate.yml
+   when: ansible_distribution == "CentOS"
+ - include: yumupdate.yml
+   when: ansible_distribution == "CentOS"
+ - include: reboot.yml
+   when: ansible_distribution == "CentOS"

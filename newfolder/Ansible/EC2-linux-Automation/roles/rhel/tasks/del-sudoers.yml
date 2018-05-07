@@ -1,0 +1,12 @@
+--- # delete sudoers
+  - name: remove the sudoers 'unixadmin, ESPT'
+    lineinfile:
+        dest: /etc/sudoers
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: absent
+    with_items:
+         - { regexp: '^(.*)# Dell(.*)$', line: '# Dell Sysadmin LDAP Group' }
+         - { regexp: '^(.*)unixadmin(.*)$', line: '+unixadmin ALL=ALL' }
+         - { regexp: '^(.*)# Temporary(.*)$', line: '# Temporary access for the ESPT team. Remove at hand over stage' }
+         - { regexp: '^(.*)Dell_ESPT(.*)$', line: '+Dell_ESPT ALL=ALL' }

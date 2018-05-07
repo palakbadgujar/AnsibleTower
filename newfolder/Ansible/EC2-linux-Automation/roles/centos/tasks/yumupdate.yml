@@ -1,0 +1,15 @@
+---
+#   - name: Run yum update
+#     yum: 
+#       name: '*' 
+#       state: latest 
+#       exclude: kernel*
+
+#   - name: Run yum update kernel
+#     yum:
+#       name: kernel-{{ kernel_version }}
+#       name: kernel-3.10.0-514.10.2.el7.x86_64
+#       state: present
+
+   - name: Run yum update
+     yum: name=* state=latest
